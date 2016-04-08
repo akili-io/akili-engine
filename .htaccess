@@ -1,0 +1,17 @@
+AddDefaultCharset UTF-8
+
+<FilesMatch ".(htaccess|htpasswd|ini|phps|fla|psd|log|sh|md|log|keep|gitignore|getkeep)$">
+ Order Allow,Deny
+ Deny from all
+ </FilesMatch>
+
+RewriteEngine On
+Options -Indexes
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)/page([0-9]+)$ index.php?u=$1$3&page=$2&%{QUERY_STRING} [E=FINISH:1,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php?u=$1&%{QUERY_STRING} [E=FINISH:1,L]
