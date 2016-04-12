@@ -62,6 +62,12 @@ foreach($_action as $_action_part){
     $action .= ucfirst($_action_part);
 }
 
+// Security fix
+if(preg_match('/\W/', $module) or preg_match('/\W/', $action)){
+    $module = DEFAULT_MODULE;
+    $action = DEFAULT_ACTION;
+}
+
 define('CURRENT_MODULE',  ucfirst($module));
 define('CURRENT_ACTION',  $action);
 
