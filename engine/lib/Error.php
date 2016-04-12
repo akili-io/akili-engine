@@ -55,7 +55,7 @@ class Error extends Core
      * Set 404 Error
      */
     public function set404(){
-        $this->set('Unauthorized', 404);
+        $this->set('Not Found', 404);
     }
 
 }
