@@ -105,12 +105,12 @@ class DB {
                     if($last_ch == '<' or $last_ch == '>'){
                         $field = trim(substr($field, 0, -1));
                     } else
-                    if($last_ch == '='){
-                        $last_ch = substr($field, -2);
-                        $field = trim(substr($field, 0, -2));
-                    } else {
-                        $last_ch = '=';
-                    }
+                        if($last_ch == '='){
+                            $last_ch = substr($field, -2);
+                            $field = trim(substr($field, 0, -2));
+                        } else {
+                            $last_ch = '=';
+                        }
                     $current_where .= " s1.$field $last_ch :$field";
 
                     $binds[$field] = $value;
@@ -351,7 +351,7 @@ class DB {
      * @return PDOStatement
      */
     public function delete($table_name){
-        $sql = 'DELETE FROM `' . $table_name . '` ';
+        $sql = 'DELETE FROM `s1` USING `' . $table_name . '` AS `s1` ';
 
         if(isset($this->query_builder['where'])){
             $sql .= 'WHERE ' . $this->query_builder['where'];
@@ -385,7 +385,7 @@ class DB {
             $error->set('There is nothing to update');
         }
 
-        $sql = 'UPDATE `' . $table_name . '` SET ';
+        $sql = 'UPDATE `' . $table_name . '` AS `s1` SET ';
 
         if(!isset($this->query_builder['binds'])){
             $this->query_builder['binds'] = array();
