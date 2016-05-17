@@ -9,7 +9,7 @@ class Session extends Core{
     private static $instance = false;
 
     public $id = null,
-           $user = null;
+        $user = null;
 
     /**
      * return instance Session
@@ -117,11 +117,11 @@ class Session extends Core{
         if(isset($user['pass']))$user['pass'] = $this->getHashedPass($user['login'], $user['pass']);
 
         if($this->db()
-            ->where(array(
-                'login'=>$user['login'],
-                'deleted'=>0))
-            ->limit(1)
-            ->count('user')!=0
+                ->where(array(
+                    'login'=>$user['login'],
+                    'deleted'=>0))
+                ->limit(1)
+                ->count('user')!=0
         ){
             return 'login_busy';
         }
@@ -129,15 +129,45 @@ class Session extends Core{
         do{
             $user_hash = Security::getHash(Security::getRandomString(15));
         }while($this->db()
-            ->where(array(
-                'user_hash'=>$user_hash,
-                'deleted'=>0))
-            ->limit(1)
-            ->count('user') != 0);
+                ->where(array(
+                    'user_hash'=>$user_hash,
+                    'deleted'=>0))
+                ->limit(1)
+                ->count('user') != 0);
 
         $user['user_hash'] = $user_hash;
         $this->db()->insert('user', $user);
         if($user['id'] = $this->db()->lastInsertId()){
+            return $user;
+        }else{
+            return 'error';
+        }
+    }
+
+    /**
+     * Change password
+     *
+     * @param $user array
+     * @return string|array
+     */
+    public function changePassword($password){
+        if(!$user = $this->user){
+            $this->error()->set403();
+        }
+
+        if(empty($password)){
+            return 'empty_pass';
+        }
+
+        $user['pass'] = $this->getHashedPass($user['login'], $password);
+
+        if($this->db()
+            ->where(array(
+                'login'=>$user['login'],
+                'deleted'=>0))
+            ->update('user', array('pass' => $user['pass']))){
+
+            $this->user['pass'] = $user['pass'];
             return $user;
         }else{
             return 'error';
