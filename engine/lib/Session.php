@@ -168,6 +168,8 @@ class Session extends Core{
             ->update('user', array('pass' => $user['pass']))){
 
             $this->user['pass'] = $user['pass'];
+
+            $this->authorization($user['login'], $password);
             return $user;
         }else{
             return 'error';
