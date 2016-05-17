@@ -263,7 +263,7 @@ class DB {
         $sql .= ' FROM ' . $table_name . ' AS s1 ';
 
         if(isset($this->query_builder['join'])){
-            $sql .= ' ' . $this->query_builder['join'];
+            $sql .= ' ' . $this->query_builder['join'] . ' ';
         }
 
         if(isset($this->query_builder['where'])){
