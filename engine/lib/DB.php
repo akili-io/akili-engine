@@ -290,7 +290,10 @@ class DB {
             $this->query_builder['binds'] = array();
         }
 
-        return $this->query($sql, $this->query_builder['binds']);
+        $binds = $this->query_builder['binds'];
+        $this->query_builder = array();
+
+        return $this->query($sql, $binds);
     }
 
     /**
@@ -341,6 +344,7 @@ class DB {
             $sql .= '(' . $keys . ') VALUE (' . $bind . ')';
         }
 
+        $this->query_builder = array();
         return $this->query($sql, $values);
     }
 
@@ -369,7 +373,10 @@ class DB {
             $this->query_builder['binds'] = array();
         }
 
-        return $this->query($sql, $this->query_builder['binds']);
+        $binds = $this->query_builder['binds'];
+        $this->query_builder = array();
+
+        return $this->query($sql, $binds);
     }
 
     /**
@@ -423,7 +430,10 @@ class DB {
             $sql .= ' LIMIT ' . $this->query_builder['limit'];
         }
 
-        return $this->query($sql, $this->query_builder['binds']);
+        $binds = $this->query_builder['binds'];
+        $this->query_builder = array();
+
+        return $this->query($sql, $binds);
     }
 
 }
